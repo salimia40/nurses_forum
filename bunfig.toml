@@ -1,0 +1,26 @@
+[serve.static]
+plugins = ["bun-plugin-tailwind"]
+env = "BUN_PUBLIC_*"
+
+[test]
+# Set the configuration for test runner
+preload = ["./tests/happydom.ts", "./tests/testing-library.ts"]
+# You can add test environment variables here
+env = { NODE_ENV = "test" }
+# Configure coverage
+coverage = true
+# Exclude UI components from coverage
+coverage-exclude = ["**/src/components/ui/**"]
+
+[test.bun]
+allowCycles = true
+
+# Import configuration
+[import]
+# Root directory to resolve relative import paths
+root = "."
+
+# Alternative way to set up path aliases
+[resolver]
+extensions = [".ts", ".tsx", ".js", ".jsx", ".json"]
+main-fields = ["browser", "module", "main"]

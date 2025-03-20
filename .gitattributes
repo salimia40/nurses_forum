@@ -1,0 +1,43 @@
+* text=auto eol=lf
+
+# Source code
+*.css text
+*.html text
+*.js text
+*.json text
+*.jsx text
+*.ts text
+*.tsx text
+*.md text
+*.mdx text
+*.scss text
+*.svg text
+*.yml text
+
+# Documentation
+*.md text
+*.txt text
+LICENSE text
+
+# Configs
+.gitattributes text
+.gitignore text
+.prettierrc text
+.eslintrc text
+*.yml text
+*.yaml text
+*.json text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.mp4 binary
+*.webm binary 

@@ -1,0 +1,8 @@
+node_modules
+dist
+build
+.next
+public
+coverage
+bun.lockb
+*.d.ts 
