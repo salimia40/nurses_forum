@@ -6,6 +6,7 @@ import typescriptEslintParser from '@typescript-eslint/parser';
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import drizzlePlugin from 'eslint-plugin-drizzle';
 
 export default [
   // Ignore patterns (migrated from .eslintignore)
@@ -19,6 +20,8 @@ export default [
       'coverage',
       '**/*.d.ts',
       'bun.lockb',
+      './build.ts',
+      './commitlint.config.js',
     ],
   },
 
@@ -49,6 +52,7 @@ export default [
       'react-hooks': reactHooksPlugin,
       '@typescript-eslint': typescriptEslintPlugin,
       prettier: prettierPlugin,
+      drizzle: drizzlePlugin,
     },
     settings: {
       react: {
@@ -74,6 +78,10 @@ export default [
 
       // Prettier integration
       'prettier/prettier': 'warn',
+
+      // Drizzle plugin rules
+      'drizzle/enforce-update-with-where': "error",
+      'drizzle/enforce-delete-with-where': "error"
     },
   },
 

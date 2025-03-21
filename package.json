@@ -17,7 +17,11 @@
     "lint-staged": "lint-staged",
     "test": "bun test",
     "test:watch": "bun test --watch",
-    "test:coverage": "bun test --coverage"
+    "test:coverage": "bun test --coverage",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -29,6 +33,7 @@
     ]
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.4.3",
     "@hookform/resolvers": "^4.1.0",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-select": "^2.1.6",
@@ -37,6 +42,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.40.1",
+    "drizzle-zod": "^0.7.0",
     "hono": "^4.7.5",
     "lucide-react": "^0.475.0",
     "react": "^19",
@@ -64,6 +70,7 @@
     "drizzle-kit": "^0.30.5",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-drizzle": "^0.2.3",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
