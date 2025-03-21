@@ -1,5 +1,5 @@
 export function App() {
-  return <div className="container mx-auto p-8 text-center relative z-10"></div>;
+  return <div className="relative z-10 container mx-auto p-8 text-center">this is a test</div>;
 }
 
 export default App;
