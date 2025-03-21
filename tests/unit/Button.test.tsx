@@ -1,6 +1,6 @@
 import { describe, expect, test, spyOn } from 'bun:test';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Button } from '../../src/components/ui/button';
+import { Button } from '@/frontend/components/ui/button';
 
 describe('Button Component', () => {
   test('renders correctly', () => {
