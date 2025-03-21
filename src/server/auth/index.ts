@@ -1,7 +1,8 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import db from '@/server/db';
+import { db } from '@/server/db';
 import { phoneNumber, username, magicLink, emailOTP, admin } from 'better-auth/plugins';
+import { sendOTPSMS, sendMagicLinkEmail, sendOTPEmail } from '@/server/services/mock';
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -15,19 +16,19 @@ export const auth = betterAuth({
   plugins: [
     username(),
     phoneNumber({
-      sendOTP: ({ phoneNumber, code }, request) => {
-        //TODO: Implement sending OTP code via SMS
+      sendOTP: async ({ phoneNumber, code }) => {
+        await sendOTPSMS({ phoneNumber, code });
       },
     }),
     magicLink({
-      sendMagicLink: async ({ email, token, url }, request) => {
-        //TODO: send email to user
+      sendMagicLink: async ({ email, token, url }) => {
+        await sendMagicLinkEmail({ email, token, url });
       },
     }),
     emailOTP({
       sendVerificationOnSignUp: true,
       async sendVerificationOTP({ email, otp, type }) {
-        // Implement the sendVerificationOTP method to send the OTP to the user's email address
+        await sendOTPEmail({ email, otp, type });
       },
     }),
     admin(),
