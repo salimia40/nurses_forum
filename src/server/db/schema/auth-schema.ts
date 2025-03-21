@@ -19,13 +19,11 @@ export const user = pgTable(
     banReason: text('ban_reason'),
     banExpires: timestamp('ban_expires'),
   },
-  (table) => {
-    return {
-      emailIdx: index('user_email_idx').on(table.email),
-      usernameIdx: index('user_username_idx').on(table.username),
-      phoneNumberIdx: index('user_phone_number_idx').on(table.phoneNumber),
-    };
-  },
+  (t) => [
+    index('user_email_idx').on(t.email),
+    index('user_username_idx').on(t.username),
+    index('user_phone_number_idx').on(t.phoneNumber),
+  ],
 );
 
 export const session = pgTable(
@@ -43,12 +41,7 @@ export const session = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     impersonatedBy: text('impersonated_by'),
   },
-  (table) => {
-    return {
-      userIdIdx: index('session_user_id_idx').on(table.userId),
-      tokenIdx: index('session_token_idx').on(table.token),
-    };
-  },
+  (t) => [index('session_token_idx').on(t.token), index('session_user_id_idx').on(t.userId)],
 );
 
 export const account = pgTable(
@@ -70,11 +63,7 @@ export const account = pgTable(
     createdAt: timestamp('created_at').notNull(),
     updatedAt: timestamp('updated_at').notNull(),
   },
-  (table) => {
-    return {
-      userIdIdx: index('account_user_id_idx').on(table.userId),
-    };
-  },
+  (t) => [index('account_user_id_idx').on(t.userId)],
 );
 
 export const verification = pgTable(
@@ -87,11 +76,7 @@ export const verification = pgTable(
     createdAt: timestamp('created_at'),
     updatedAt: timestamp('updated_at'),
   },
-  (table) => {
-    return {
-      identifierIdx: index('verification_identifier_idx').on(table.identifier),
-    };
-  },
+  (t) => [index('verification_identifier_idx').on(t.identifier)],
 );
 
 export const passkey = pgTable(
@@ -110,9 +95,5 @@ export const passkey = pgTable(
     transports: text('transports'),
     createdAt: timestamp('created_at'),
   },
-  (table) => {
-    return {
-      userIdIdx: index('passkey_user_id_idx').on(table.userId),
-    };
-  },
+  (t) => [index('passkey_user_id_idx').on(t.userId)],
 );
