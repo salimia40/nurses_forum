@@ -17,7 +17,7 @@
 - ✅ 🔴 Set up project structure
 - ✅ 🔴 Install and configure TailwindCSS
 - ✅ 🔴 Install and configure Shadcn/ui components
-- ⬜ 🔴 Set up authentication system
+- 🟨 🔴 Set up authentication system
 - ⬜ 🔴 Create database schema
 - ⬜ 🔴 Configure Persian language support
 - ⬜ 🟠 Set up routing
@@ -28,7 +28,7 @@
 
 ### User Profiles & Authentication
 
-- ⬜ 🔴 User registration/login
+- 🟨 🔴 User registration/login
 - ⬜ 🔴 Professional credentials verification
 - ⬜ 🟠 User profile page
 - ⬜ 🟠 Work history/specialization display
