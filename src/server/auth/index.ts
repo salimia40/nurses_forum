@@ -2,9 +2,16 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '@/server/db';
 import { phoneNumber, username, magicLink, emailOTP, admin } from 'better-auth/plugins';
+import { passkey } from 'better-auth/plugins/passkey';
 import { sendOTPSMS, sendMagicLinkEmail, sendOTPEmail } from '@/server/services/mock';
 
 export const auth = betterAuth({
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
+    },
+  },
   database: drizzleAdapter(db, {
     provider: 'pg',
   }),
@@ -32,5 +39,6 @@ export const auth = betterAuth({
       },
     }),
     admin(),
+    passkey(),
   ],
 });
