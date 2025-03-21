@@ -6,7 +6,10 @@ import {
   emailOTPClient,
   passkeyClient,
   adminClient,
+  inferAdditionalFields,
 } from 'better-auth/client/plugins';
+import { auth } from '@/server/auth';
+
 export const authClient = createAuthClient({
   plugins: [
     usernameClient(),
@@ -15,5 +18,6 @@ export const authClient = createAuthClient({
     emailOTPClient(),
     passkeyClient(),
     adminClient(),
+    inferAdditionalFields<typeof auth>(),
   ],
 });
