@@ -7,6 +7,7 @@ import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import drizzlePlugin from 'eslint-plugin-drizzle';
+import pluginRouter from '@tanstack/eslint-plugin-router';
 
 export default [
   // Ignore patterns (migrated from .eslintignore)
@@ -53,6 +54,7 @@ export default [
       '@typescript-eslint': typescriptEslintPlugin,
       prettier: prettierPlugin,
       drizzle: drizzlePlugin,
+      '@tanstack/router': pluginRouter,
     },
     settings: {
       react: {
@@ -80,8 +82,11 @@ export default [
       'prettier/prettier': 'warn',
 
       // Drizzle plugin rules
-      'drizzle/enforce-update-with-where': "error",
-      'drizzle/enforce-delete-with-where': "error"
+      'drizzle/enforce-update-with-where': 'error',
+      'drizzle/enforce-delete-with-where': 'error',
+
+      // Router plugin rules
+      '@tanstack/router/create-route-property-order': 'error',
     },
   },
 
