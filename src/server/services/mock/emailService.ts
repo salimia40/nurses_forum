@@ -32,7 +32,6 @@ export const sendEmail = async ({
  */
 export const sendMagicLinkEmail = async ({
   email,
-  token,
   url,
 }: {
   email: string;
