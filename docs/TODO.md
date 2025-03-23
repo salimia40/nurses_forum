@@ -18,7 +18,7 @@
 - ✅ 🔴 Install and configure TailwindCSS
 - ✅ 🔴 Install and configure Shadcn/ui components
 - 🟨 🔴 Set up authentication system
-- ⬜ 🔴 Create database schema
+- ✅ 🔴 Create database schema
 - ⬜ 🔴 Configure Persian language support
 - ⬜ 🟠 Set up routing
 - ⬜ 🟠 Implement dark/light theme
