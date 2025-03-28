@@ -1,5 +1,6 @@
 import { pgTable, text, timestamp, index } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // User reports (for moderation)
 export const userReport = pgTable(
@@ -28,6 +29,24 @@ export const userReport = pgTable(
   ],
 );
 
+export const userReportRelations = relations(userReport, ({ one }) => ({
+  reporter: one(user, {
+    fields: [userReport.reporterId],
+    references: [user.id],
+    relationName: 'reporter',
+  }),
+  reportedUser: one(user, {
+    fields: [userReport.reportedUserId],
+    references: [user.id],
+    relationName: 'reportedUser',
+  }),
+  moderator: one(user, {
+    fields: [userReport.moderatorId],
+    references: [user.id],
+    relationName: 'moderator',
+  }),
+}));
+
 // Content reports (for threads, comments, resources, etc.)
 export const contentReport = pgTable(
   'content_report',
@@ -53,3 +72,14 @@ export const contentReport = pgTable(
     index('content_report_status_idx').on(t.status),
   ],
 );
+
+export const contentReportRelations = relations(contentReport, ({ one }) => ({
+  reporter: one(user, {
+    fields: [contentReport.reporterId],
+    references: [user.id],
+  }),
+  moderator: one(user, {
+    fields: [contentReport.moderatorId],
+    references: [user.id],
+  }),
+}));

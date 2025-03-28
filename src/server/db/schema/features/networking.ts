@@ -9,6 +9,7 @@ import {
   primaryKey,
 } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // Mentorship relationships
 export const mentorship = pgTable(
@@ -35,6 +36,19 @@ export const mentorship = pgTable(
     index('mentorship_status_idx').on(t.status),
   ],
 );
+
+export const mentorshipRelations = relations(mentorship, ({ one }) => ({
+  mentor: one(user, {
+    fields: [mentorship.mentorId],
+    references: [user.id],
+    relationName: 'mentor',
+  }),
+  mentee: one(user, {
+    fields: [mentorship.menteeId],
+    references: [user.id],
+    relationName: 'mentee',
+  }),
+}));
 
 // Events calendar
 export const event = pgTable(
@@ -64,6 +78,14 @@ export const event = pgTable(
   ],
 );
 
+export const eventRelations = relations(event, ({ one, many }) => ({
+  organizer: one(user, {
+    fields: [event.organizerId],
+    references: [user.id],
+  }),
+  participants: many(eventParticipant),
+}));
+
 // Event participants
 export const eventParticipant = pgTable(
   'event_participant',
@@ -82,3 +104,14 @@ export const eventParticipant = pgTable(
     index('event_participant_status_idx').on(t.status),
   ],
 );
+
+export const eventParticipantRelations = relations(eventParticipant, ({ one }) => ({
+  event: one(event, {
+    fields: [eventParticipant.eventId],
+    references: [event.id],
+  }),
+  user: one(user, {
+    fields: [eventParticipant.userId],
+    references: [user.id],
+  }),
+}));

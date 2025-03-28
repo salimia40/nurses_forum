@@ -1,5 +1,6 @@
 import { pgTable, text, date, integer, timestamp, boolean, index } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // Policy updates
 export const policyUpdate = pgTable(
@@ -26,6 +27,13 @@ export const policyUpdate = pgTable(
   ],
 );
 
+export const policyUpdateRelations = relations(policyUpdate, ({ one }) => ({
+  author: one(user, {
+    fields: [policyUpdate.authorId],
+    references: [user.id],
+  }),
+}));
+
 // Equipment/resource reviews
 export const equipmentReview = pgTable(
   'equipment_review',
@@ -51,3 +59,10 @@ export const equipmentReview = pgTable(
     index('equipment_review_rating_idx').on(t.rating),
   ],
 );
+
+export const equipmentReviewRelations = relations(equipmentReview, ({ one }) => ({
+  author: one(user, {
+    fields: [equipmentReview.authorId],
+    references: [user.id],
+  }),
+}));

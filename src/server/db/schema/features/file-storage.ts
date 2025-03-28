@@ -1,5 +1,6 @@
 import { pgTable, text, integer, timestamp, boolean, index } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // File storage schema for the Nurses Forum application
 // This schema defines tables for tracking files stored in S3
@@ -34,6 +35,15 @@ export const file = pgTable(
   ],
 );
 
+export const fileRelations = relations(file, ({ one, many }) => ({
+  uploader: one(user, {
+    fields: [file.uploaderId],
+    references: [user.id],
+  }),
+  attachments: many(attachment),
+  folders: many(folderFile),
+}));
+
 /**
  * Unified attachment table - Links files to various entities throughout the application
  * This allows tracking which files are associated with any type of entity in the system
@@ -64,6 +74,17 @@ export const attachment = pgTable(
   ],
 );
 
+export const attachmentRelations = relations(attachment, ({ one }) => ({
+  file: one(file, {
+    fields: [attachment.fileId],
+    references: [file.id],
+  }),
+  addedBy: one(user, {
+    fields: [attachment.addedById],
+    references: [user.id],
+  }),
+}));
+
 /**
  * Folder table - For organizing files in virtual folders
  * This is for UI organization and doesn't necessarily reflect S3 structure
@@ -89,6 +110,19 @@ export const folder = pgTable(
   ],
 );
 
+export const folderRelations = relations(folder, ({ one, many }) => ({
+  owner: one(user, {
+    fields: [folder.ownerId],
+    references: [user.id],
+  }),
+  parent: one(folder, {
+    fields: [folder.parentId],
+    references: [folder.id],
+  }),
+  subfolders: many(folder, { relationName: 'subfolders' }),
+  files: many(folderFile),
+}));
+
 /**
  * Folder file relationship table - Tracks which files are in which folders
  */
@@ -109,3 +143,14 @@ export const folderFile = pgTable(
     index('folder_file_file_id_idx').on(t.fileId),
   ],
 );
+
+export const folderFileRelations = relations(folderFile, ({ one }) => ({
+  folder: one(folder, {
+    fields: [folderFile.folderId],
+    references: [folder.id],
+  }),
+  file: one(file, {
+    fields: [folderFile.fileId],
+    references: [file.id],
+  }),
+}));

@@ -1,5 +1,6 @@
 import { pgTable, text, integer, timestamp, boolean, json, index } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // User profile extensions for nursing-specific information
 export const nurseProfile = pgTable(
@@ -28,6 +29,13 @@ export const nurseProfile = pgTable(
   ],
 );
 
+export const nurseProfileRelations = relations(nurseProfile, ({ one }) => ({
+  user: one(user, {
+    fields: [nurseProfile.userId],
+    references: [user.id],
+  }),
+}));
+
 // Notifications
 export const notification = pgTable(
   'notification',
@@ -51,6 +59,13 @@ export const notification = pgTable(
   ],
 );
 
+export const notificationRelations = relations(notification, ({ one }) => ({
+  user: one(user, {
+    fields: [notification.userId],
+    references: [user.id],
+  }),
+}));
+
 // User settings for notifications
 export const userNotificationSettings = pgTable('user_notification_settings', {
   userId: text('user_id')
@@ -68,3 +83,10 @@ export const userNotificationSettings = pgTable('user_notification_settings', {
   policyUpdates: boolean('policy_updates').default(true),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const userNotificationSettingsRelations = relations(userNotificationSettings, ({ one }) => ({
+  user: one(user, {
+    fields: [userNotificationSettings.userId],
+    references: [user.id],
+  }),
+}));

@@ -1,5 +1,6 @@
 import { pgTable, text, timestamp, boolean, index, primaryKey } from 'drizzle-orm/pg-core';
 import { thread } from './forum';
+import { relations } from 'drizzle-orm';
 
 /**
  * Resource extension for threads
@@ -22,6 +23,14 @@ export const resource = pgTable(
   (t) => [index('resource_type_idx').on(t.type)],
 );
 
+export const resourceRelations = relations(resource, ({ one, many }) => ({
+  thread: one(thread, {
+    fields: [resource.threadId],
+    references: [thread.id],
+  }),
+  tags: many(resourceToTag),
+}));
+
 // Resource tags
 export const resourceTag = pgTable(
   'resource_tag',
@@ -32,6 +41,10 @@ export const resourceTag = pgTable(
   },
   (t) => [index('resource_tag_name_idx').on(t.name)],
 );
+
+export const resourceTagRelations = relations(resourceTag, ({ many }) => ({
+  resources: many(resourceToTag),
+}));
 
 // Resource to tag mapping
 export const resourceToTag = pgTable(
@@ -46,3 +59,14 @@ export const resourceToTag = pgTable(
   },
   (t) => [primaryKey({ columns: [t.resourceId, t.tagId] })],
 );
+
+export const resourceToTagRelations = relations(resourceToTag, ({ one }) => ({
+  resource: one(resource, {
+    fields: [resourceToTag.resourceId],
+    references: [resource.threadId],
+  }),
+  tag: one(resourceTag, {
+    fields: [resourceToTag.tagId],
+    references: [resourceTag.id],
+  }),
+}));

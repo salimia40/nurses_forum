@@ -1,5 +1,6 @@
 import { pgTable, text, date, time, timestamp, index } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // Shift exchange platform
 export const shift = pgTable(
@@ -28,6 +29,14 @@ export const shift = pgTable(
   ],
 );
 
+export const shiftRelations = relations(shift, ({ one, many }) => ({
+  user: one(user, {
+    fields: [shift.userId],
+    references: [user.id],
+  }),
+  applications: many(shiftApplication),
+}));
+
 // Shift applications
 export const shiftApplication = pgTable(
   'shift_application',
@@ -50,3 +59,14 @@ export const shiftApplication = pgTable(
     index('shift_application_status_idx').on(t.status),
   ],
 );
+
+export const shiftApplicationRelations = relations(shiftApplication, ({ one }) => ({
+  shift: one(shift, {
+    fields: [shiftApplication.shiftId],
+    references: [shift.id],
+  }),
+  applicant: one(user, {
+    fields: [shiftApplication.applicantId],
+    references: [user.id],
+  }),
+}));

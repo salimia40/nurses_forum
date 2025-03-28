@@ -1,5 +1,6 @@
 import { pgTable, text, timestamp, boolean, index, primaryKey } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // Private messaging
 export const conversation = pgTable(
@@ -25,6 +26,16 @@ export const conversation = pgTable(
   ],
 );
 
+export const conversationRelations = relations(conversation, ({ one, many }) => ({
+  creator: one(user, {
+    fields: [conversation.createdById],
+    references: [user.id],
+  }),
+  participants: many(conversationParticipant),
+  messages: many(message),
+  anonymousIdentities: many(anonymousIdentity),
+}));
+
 // Conversation participants
 export const conversationParticipant = pgTable(
   'conversation_participant',
@@ -41,6 +52,21 @@ export const conversationParticipant = pgTable(
   },
   (t) => [primaryKey({ columns: [t.conversationId, t.userId] })],
 );
+
+export const conversationParticipantRelations = relations(conversationParticipant, ({ one }) => ({
+  conversation: one(conversation, {
+    fields: [conversationParticipant.conversationId],
+    references: [conversation.id],
+  }),
+  user: one(user, {
+    fields: [conversationParticipant.userId],
+    references: [user.id],
+  }),
+  lastReadMessage: one(message, {
+    fields: [conversationParticipant.lastReadMessageId],
+    references: [message.id],
+  }),
+}));
 
 // Anonymous identity management for participants
 export const anonymousIdentity = pgTable(
@@ -61,6 +87,17 @@ export const anonymousIdentity = pgTable(
     index('anonymous_identity_conversation_id_idx').on(t.conversationId),
   ],
 );
+
+export const anonymousIdentityRelations = relations(anonymousIdentity, ({ one }) => ({
+  conversation: one(conversation, {
+    fields: [anonymousIdentity.conversationId],
+    references: [conversation.id],
+  }),
+  user: one(user, {
+    fields: [anonymousIdentity.userId],
+    references: [user.id],
+  }),
+}));
 
 // Messages in conversations
 export const message = pgTable(
@@ -85,3 +122,15 @@ export const message = pgTable(
     index('message_created_at_idx').on(t.createdAt),
   ],
 );
+
+export const messageRelations = relations(message, ({ one, many }) => ({
+  conversation: one(conversation, {
+    fields: [message.conversationId],
+    references: [conversation.id],
+  }),
+  sender: one(user, {
+    fields: [message.senderId],
+    references: [user.id],
+  }),
+  readBy: many(conversationParticipant),
+}));

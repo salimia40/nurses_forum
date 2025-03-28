@@ -1,7 +1,9 @@
-// Authentication schema (user, session, etc.)
+// Re-export all schema entities
 export * from './auth-schema';
 
-// Feature-specific schemas
+// Features
+export * from './features/user-profile';
+export * from './user-relations';
 export * from './features/forum';
 export * from './features/resources';
 export * from './features/networking';

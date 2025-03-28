@@ -1,5 +1,6 @@
 import { pgTable, text, integer, timestamp, boolean, index, primaryKey } from 'drizzle-orm/pg-core';
 import { user } from '../auth-schema';
+import { relations } from 'drizzle-orm';
 
 // Specialized categories for forums (ICU, pediatric, geriatric, etc.)
 export const category = pgTable(
@@ -18,6 +19,16 @@ export const category = pgTable(
   },
   (t) => [index('category_slug_idx').on(t.slug)],
 );
+
+export const categoryRelations = relations(category, ({ one, many }) => ({
+  parent: one(category, {
+    fields: [category.parentId],
+    references: [category.id],
+  }),
+  subcategories: many(category),
+  threads: many(thread),
+  followers: many(categoryFollow),
+}));
 
 // Threads in forum categories
 export const thread = pgTable(
@@ -47,6 +58,20 @@ export const thread = pgTable(
   ],
 );
 
+export const threadRelations = relations(thread, ({ one, many }) => ({
+  category: one(category, {
+    fields: [thread.categoryId],
+    references: [category.id],
+  }),
+  author: one(user, {
+    fields: [thread.authorId],
+    references: [user.id],
+  }),
+  comments: many(comment),
+  reactions: many(threadReaction),
+  followers: many(threadFollow),
+}));
+
 // Comments/replies to threads
 export const comment = pgTable(
   'comment',
@@ -71,6 +96,23 @@ export const comment = pgTable(
   ],
 );
 
+export const commentRelations = relations(comment, ({ one, many }) => ({
+  thread: one(thread, {
+    fields: [comment.threadId],
+    references: [thread.id],
+  }),
+  author: one(user, {
+    fields: [comment.authorId],
+    references: [user.id],
+  }),
+  parent: one(comment, {
+    fields: [comment.parentId],
+    references: [comment.id],
+  }),
+  replies: many(comment, { relationName: 'replies' }),
+  reactions: many(commentReaction),
+}));
+
 // Thread reactions (likes, helpful, etc.)
 export const threadReaction = pgTable(
   'thread_reaction',
@@ -87,6 +129,17 @@ export const threadReaction = pgTable(
   (t) => [primaryKey({ columns: [t.threadId, t.userId, t.type] })],
 );
 
+export const threadReactionRelations = relations(threadReaction, ({ one }) => ({
+  thread: one(thread, {
+    fields: [threadReaction.threadId],
+    references: [thread.id],
+  }),
+  user: one(user, {
+    fields: [threadReaction.userId],
+    references: [user.id],
+  }),
+}));
+
 // Comment reactions
 export const commentReaction = pgTable(
   'comment_reaction',
@@ -102,6 +155,17 @@ export const commentReaction = pgTable(
   },
   (t) => [primaryKey({ columns: [t.commentId, t.userId, t.type] })],
 );
+
+export const commentReactionRelations = relations(commentReaction, ({ one }) => ({
+  comment: one(comment, {
+    fields: [commentReaction.commentId],
+    references: [comment.id],
+  }),
+  user: one(user, {
+    fields: [commentReaction.userId],
+    references: [user.id],
+  }),
+}));
 
 // User follows for threads - tracks which threads a user is following
 export const threadFollow = pgTable(
@@ -123,6 +187,17 @@ export const threadFollow = pgTable(
   ],
 );
 
+export const threadFollowRelations = relations(threadFollow, ({ one }) => ({
+  thread: one(thread, {
+    fields: [threadFollow.threadId],
+    references: [thread.id],
+  }),
+  user: one(user, {
+    fields: [threadFollow.userId],
+    references: [user.id],
+  }),
+}));
+
 // User follows for categories - tracks which categories a user is following
 export const categoryFollow = pgTable(
   'category_follow',
@@ -143,6 +218,17 @@ export const categoryFollow = pgTable(
   ],
 );
 
+export const categoryFollowRelations = relations(categoryFollow, ({ one }) => ({
+  category: one(category, {
+    fields: [categoryFollow.categoryId],
+    references: [category.id],
+  }),
+  user: one(user, {
+    fields: [categoryFollow.userId],
+    references: [user.id],
+  }),
+}));
+
 // User follows for other users - tracks which users a user is following
 export const userFollow = pgTable(
   'user_follow',
@@ -162,3 +248,16 @@ export const userFollow = pgTable(
     primaryKey({ columns: [t.followedId, t.followerId] }),
   ],
 );
+
+export const userFollowRelations = relations(userFollow, ({ one }) => ({
+  followed: one(user, {
+    fields: [userFollow.followedId],
+    references: [user.id],
+    relationName: 'followed',
+  }),
+  follower: one(user, {
+    fields: [userFollow.followerId],
+    references: [user.id],
+    relationName: 'follower',
+  }),
+}));
