@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { APP_NAME, APP_VERSION, THEMES } from '@/utils/constants';
+import { APP_NAME, APP_VERSION, THEMES } from '@/server/utils/constants';
 
 describe('Constants', () => {
   test('APP_NAME is correctly defined', () => {

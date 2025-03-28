@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { auth } from '@/server/auth';
 import { cors } from 'hono/cors';
+import { env } from '@/server/utils/env';
 
 const app = new Hono<{
   Variables: {
@@ -12,7 +13,7 @@ const app = new Hono<{
 app.use(
   '*',
   cors({
-    origin: Bun.env.BASE_URL,
+    origin: env.BASE_URL,
     allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'PATCH'],
     exposeHeaders: ['Content-Length', 'Authorization'],

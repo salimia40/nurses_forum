@@ -1,13 +1,21 @@
 import { serve } from 'bun';
-import index from './frontend/index.html';
-import app from './server';
+import index from '@/frontend/index.html';
+import app from '~/app';
+
+import { env } from '~/utils/env';
+
+/**
+ * Serve the frontend and backend
+ *
+ * @description This is the main entry point for the server
+ */
 serve({
   routes: {
     // Serve index.html for all unmatched routes.
     '/*': index,
     '/api/*': (req) => app.fetch(req),
   },
-  development: process.env.NODE_ENV !== 'production',
+  development: env.NODE_ENV !== 'production',
 });
 
-console.log('Server is running on http://localhost:3000');
+console.info(`Server is running on ${env.BASE_URL}`);

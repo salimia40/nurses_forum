@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button } from './ui/button';
-
+import AuthButtons from './auth-buttons';
 // Define the NavItem type
 interface NavItem {
   title: string;
@@ -70,7 +70,14 @@ export function Navbar({ logo, items = defaultNavItems }: NavbarProps) {
               {item.title}
             </a>
           ))}
-          <Button className="mr-4">ورود / ثبت نام</Button>
+          <div className="mr-4 flex items-center gap-2">
+            <a href="/login">
+              <Button variant="outline">ورود</Button>
+            </a>
+            <a href="/register">
+              <Button>ثبت نام</Button>
+            </a>
+          </div>
         </div>
 
         {/* Mobile menu button */}
@@ -121,7 +128,7 @@ export function Navbar({ logo, items = defaultNavItems }: NavbarProps) {
                 {item.title}
               </a>
             ))}
-            <Button className="mt-3 w-full">ورود / ثبت نام</Button>
+            <AuthButtons />
           </div>
         </div>
       )}

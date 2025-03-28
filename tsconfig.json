@@ -14,7 +14,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*", "./src/frontend/*"],
+      "~/*": ["./src/server/*"]
     },
     // Jest DOM types support
     "types": ["@testing-library/jest-dom", "bun-types", "./tests/matchers.d.ts"]

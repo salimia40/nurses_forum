@@ -62,9 +62,6 @@ export default [
       },
     },
     rules: {
-      // ESLint core rules
-      'no-unused-vars': 'warn',
-
       // React plugin rules
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
