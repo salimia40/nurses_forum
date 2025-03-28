@@ -5,6 +5,7 @@ import { trimTrailingSlash } from 'hono/trailing-slash';
 import { authMiddleware } from './routes/middlewares/auth';
 import { factory } from './routes/__base';
 import thread from './routes/thread';
+import category from './routes/category';
 import { AppError } from './utils/errors';
 import { HTTPException } from 'hono/http-exception';
 import { corsMiddleware } from './routes/middlewares/cors';
@@ -28,7 +29,7 @@ const app = factory
 
 app.on(['POST', 'GET'], '/auth/**', (c) => auth.handler(c.req.raw));
 
-app.get('/hi', (c) => c.text('Hello Bun!'));
 app.route('/thread', thread);
+app.route('/category', category);
 
 export default app;

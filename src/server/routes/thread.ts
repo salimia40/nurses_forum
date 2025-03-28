@@ -1,6 +1,6 @@
 import { factory } from './__base';
 import { z } from 'zod';
-import { zValidator } from '@hono/zod-validator';
+import { zValidator } from '~/utils/validator-wrapper';
 import { createInsertSchema } from 'drizzle-zod';
 import { thread } from '../db/schema';
 import { threadService } from '~/services';
