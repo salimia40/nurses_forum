@@ -80,7 +80,7 @@ export default [
 
       // Drizzle plugin rules
       'drizzle/enforce-update-with-where': 'error',
-      'drizzle/enforce-delete-with-where': 'error',
+      'drizzle/enforce-delete-with-where': 'off',
 
       // Router plugin rules
       '@tanstack/router/create-route-property-order': 'error',

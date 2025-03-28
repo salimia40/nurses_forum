@@ -1,34 +1,34 @@
 import { auth } from '@/server/auth';
-import { cors } from 'hono/cors';
 import { secureHeaders } from 'hono/secure-headers';
 import { trimTrailingSlash } from 'hono/trailing-slash';
-import { compress } from 'hono/compress';
 
-import { env } from '@/server/utils/env';
 import { authMiddleware } from './routes/middlewares/auth';
 import { factory } from './routes/__base';
+import thread from './routes/thread';
+import { AppError } from './utils/errors';
+import { HTTPException } from 'hono/http-exception';
+import { corsMiddleware } from './routes/middlewares/cors';
 
 const app = factory
   .createApp({ strict: true })
   .basePath('/api')
-  .use(
-    '*',
-    cors({
-      origin: env.BASE_URL,
-      allowHeaders: ['Content-Type', 'Authorization'],
-      allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'PATCH'],
-      exposeHeaders: ['Content-Length', 'Authorization'],
-      maxAge: 600,
-      credentials: true,
-    }),
-  )
+  .use(corsMiddleware)
   .use(secureHeaders())
   .use(trimTrailingSlash())
-  .use(compress())
+  .onError((err, c) => {
+    if (err instanceof AppError) {
+      return c.json({ error: err.message }, err.status);
+    } else if (err instanceof HTTPException) {
+      return c.json({ error: err.message }, err.status);
+    } else {
+      return c.json({ error: 'خطایی در اجرای عملیات رخ داد' }, 500);
+    }
+  })
   .use(authMiddleware);
 
 app.on(['POST', 'GET'], '/auth/**', (c) => auth.handler(c.req.raw));
 
 app.get('/hi', (c) => c.text('Hello Bun!'));
+app.route('/thread', thread);
 
 export default app;
