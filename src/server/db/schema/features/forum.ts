@@ -107,7 +107,6 @@ export const commentReaction = pgTable(
 export const threadFollow = pgTable(
   'thread_follow',
   {
-    id: text('id').primaryKey(),
     threadId: text('thread_id')
       .notNull()
       .references(() => thread.id, { onDelete: 'cascade' }),
@@ -128,7 +127,6 @@ export const threadFollow = pgTable(
 export const categoryFollow = pgTable(
   'category_follow',
   {
-    id: text('id').primaryKey(),
     categoryId: text('category_id')
       .notNull()
       .references(() => category.id, { onDelete: 'cascade' }),
@@ -149,7 +147,6 @@ export const categoryFollow = pgTable(
 export const userFollow = pgTable(
   'user_follow',
   {
-    id: text('id').primaryKey(),
     followedId: text('followed_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),

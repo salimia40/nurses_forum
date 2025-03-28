@@ -4,6 +4,6 @@ export default defineConfig({
   schema: './src/server/db/schema/index.ts',
   out: './drizzle',
   dbCredentials: {
-    url: Bun.env.DATABASE_URL,
+    url: Bun.env.DATABASE_URL || '',
   },
 });

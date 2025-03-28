@@ -46,7 +46,6 @@ export const conversationParticipant = pgTable(
 export const anonymousIdentity = pgTable(
   'anonymous_identity',
   {
-    id: text('id').primaryKey(),
     conversationId: text('conversation_id')
       .notNull()
       .references(() => conversation.id, { onDelete: 'cascade' }),
