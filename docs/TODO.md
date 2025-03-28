@@ -20,7 +20,7 @@
 - 🟨 🔴 Set up authentication system
 - ✅ 🔴 Create database schema
 - ⬜ 🔴 Configure Persian language support
-- ⬜ 🟠 Set up routing
+- ✅ 🟠 Set up routing
 - ⬜ 🟠 Implement dark/light theme
 - ⬜ 🟢 Create branding assets (logo, colors, typography)
 
